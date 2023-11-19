@@ -1,0 +1,482 @@
+openapi: 3.0.3
+info:
+  title: API Ứng Dụng Quản Lí Mật Khẩu
+  description: |-
+    Đây là server ứng dụng quản lí mật khẩu, giúp bạn có thể quản lí, ghi nhớ mật khẩu của nhiều tài khoản 
+      từ các ứng dụng như facebook, zalo, game,....
+
+    Hãy đọc chi tiết ở bên dưới
+  version: 1.0.11
+servers:
+  - url: /
+paths:
+  /category:
+    get:
+      tags:
+        - Danh mục
+      summary: lấy danh sách danh mục 
+      description: lấy danh sách danh mục
+      operationId: getAllCategory
+      responses:
+        '200':
+          description: lấy danh sách danh mục thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'  
+    post:
+      tags:
+        - Danh mục
+      summary: Tạo mới danh mục
+      description: Tạo mới danh mục
+      operationId: createCategory
+      requestBody:
+        description: Tạo mới danh mục
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/categoryCreate'
+        required: true
+      responses:
+        '201':
+          description: Tạo mới danh mục thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+        '400':
+          description: mẫu thông tin được gửi không đúng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequest'
+  /category/{id}:
+    put:
+      tags:
+        - Danh mục
+      summary: Cập nhật danh mục hiện tại dựa trên id
+      description: Cập nhật danh mục hiện tại dựa trên id
+      operationId: updateCategory
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d5fb9bb3de01d5bb24047
+          schema:
+            type: string
+            format: int64
+            example: 654d5fb9bb3de01d5bb24047
+      requestBody:
+        description: Cập nhật danh mục hiện tại dựa trên id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/categoryUpdate'
+        required: true
+      responses:
+        '200':
+          description: Cập nhật danh mục thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/categoryUpdateResponse'          
+        '400':
+          description: mẫu thông tin được gửi không đúng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequest'
+        '404':
+          description: "không tim thấy danh mục"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/categoryNotFound'
+    delete:
+      tags:
+        - Danh mục
+      summary: Xóa danh mục hiện tại dựa trên id, những tài khoản cùng danh mục sẽ bị xóa theo
+      description: Xóa danh mục hiện tại dựa trên id
+      operationId: deleteCategory
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d5fb9bb3de01d5bb24047
+          schema:
+            type: string
+            format: int64
+            example: 654d5fb9bb3de01d5bb24047
+      responses:  
+        '200':
+          description: "Xoá danh mục thành công"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/categoryDeleteResponse'  
+        '404':
+          description: "không tìm thấy danh mục"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/categoryNotFound'
+  /account:
+    get:
+      tags:
+        - Tài khoản
+      summary: lấy danh sách tài khoản
+      description: lấy danh sách tài khoản
+      operationId: getAllAccount
+      responses:
+        '200':
+          description: lấy danh sách tài khoản thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+    post:
+      tags:
+        - Tài khoản
+      summary: tạo mới tài khoản, phải có danh mục trước khi tạo tài khoản
+      description: tạo mới tài khoản
+      operationId: createAccount
+      requestBody:
+        description: tạo mới tài khoản
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: tạo mới tài khoản thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountCreate'
+        '400':
+          description: dữ liệu không đúng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequest'
+  /account/{id}:
+    get:
+      tags:
+        - Tài khoản
+      summary: hiển thị thông tin 1 tài khoản cụ thể dựa trên id
+      description: lấy thông tin 1 tài khoản cụ thể dựa trên id
+      operationId: getAccountById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d611bbb3de01d5bb24095
+          schema:
+            type: string
+            format: int64
+            example: 654d611bbb3de01d5bb24095
+      responses:
+        '200':
+          description: Lấy thông tin tài khoản thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'          
+        '404':
+          description: "không tim thấy tài khoản"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountNotFound'
+    put:
+      tags:
+        - Tài khoản
+      summary: Cập nhật tài khoản hiện tại dựa trên id
+      description: Cập nhật tài khoản hiện tại dựa trên id
+      operationId: updateAccount
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d611bbb3de01d5bb24095
+          schema:
+            type: string
+            format: int64
+            example: 654d611bbb3de01d5bb24095
+      requestBody:
+        description: Cập nhật tài khoản hiện tại dựa trên id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Cập nhật tài khoản thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountUpdateResponse'          
+        '400':
+          description: "khong tìm thấy id"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequest'  
+        '404':
+          description: "không tim thấy tài khoản"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountNotFound'
+    delete:
+      tags:
+        - Tài khoản
+      summary: Xóa tài khoản hiện tại dựa trên id
+      description: Xóa tài khoản hiện tại dựa trên id
+      operationId: deleteAccount
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d611bbb3de01d5bb24095
+          schema:
+            type: string
+            format: int64
+            example: 654d611bbb3de01d5bb24095
+      responses:    
+        '200':
+          description: "Xoá tài khoản thành công"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountDeleteResponse'
+        '404':
+          description: "không tìm thấy tài khoản"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountNotFound'
+  /account/show/{id}:
+    get:
+      tags:
+        - Tài khoản
+      summary: hiển thị mật khẩu 1 tài khoản cụ thể
+      description: hiển thị mật khẩu 1 tài khoản cụ thể dựa trên id
+      operationId: showPasswordAccount
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d60aebb3de01d5bb24077
+          schema:
+            type: string
+            format: int64
+            example: 654d60aebb3de01d5bb24077
+      responses:
+        '200':
+          description: hiển thị mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/showPassAccount'
+        '404':
+          description: "không tim thấy tài khoản"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountNotFound'
+components:
+  schemas:
+    category:
+      required:
+        - title
+      type: object
+      properties:
+        id:
+          type: string
+          format: int64
+          example: 654d5fbfbb3de01d5bb2404a
+        title:
+          type: string
+          example: youtube
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    categoryCreate:
+      required:
+        - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: category Create
+    categoryUpdate:
+      required:
+        - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: category Update
+    categoryUpdateResponse:
+      properties:
+        status:
+          example: 200
+        message:
+          example: Cập nhật danh mục thành công
+    categoryDeleteResponse:
+      properties:
+        status:
+          example: 200
+        message:
+          example: Xóa danh mục thành công
+    account:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6548068904f1d966ab12f445
+        username:
+          type: string
+          example: acc1
+        site:
+          type: string
+          example: "string site"
+        note:
+          type: string
+          example: "string note"
+        category: 
+          type: object
+          $ref: '#/components/schemas/category' 
+    accountCreateRequest:
+      required:
+        - username
+        - password
+        - category
+      type: object
+      properties:
+        username:
+          type: string
+          example: acc2
+        password:
+          type: string
+          example: acc2pass
+        category:
+          properties:
+            id:
+              type: string
+              example: 654d5fbfbb3de01d5bb2404a
+            title:
+              type: string
+              example: cate 1
+        site: 
+          type: string
+          example: site string
+        note: 
+          type: string
+          example: note string
+    accountCreate:
+      required:
+        - username
+        - password
+        - category
+      type: object
+      properties:
+        username:
+          type: string
+          example: acc2
+        password:
+          type: string
+          example: acc2pass
+        category:
+          properties:
+            id:
+              type: string
+              example: 654d5fbfbb3de01d5bb2404a
+            title:
+              type: string
+              example: youtube
+        site: 
+          type: string
+          example: site string
+        note: 
+          type: string
+          example: note string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    accountUpdateRequest:
+      required:
+        - username
+        - password
+        - category
+      type: object
+      properties:
+        id:
+          type: string
+          example: 654d611bbb3de01d5bb24095
+        username:
+          type: string
+          example: tw2
+        password:
+          type: string
+          example: tw2pass
+        category:
+          properties:
+            id:
+              type: string
+              example: 654d6046bb3de01d5bb2405e
+            title:
+              type: string
+              example: twitter
+        site: 
+          type: string
+          example: site string
+        note: 
+          type: string
+          example: note string
+    accountUpdateResponse:
+      properties:
+        status:
+          example: 200
+        message:
+          example: Cập nhật tài khoản thành công
+    accountDeleteResponse:
+      properties:
+        status:
+          example: 200
+        message:
+          example: Xóa tài khoản thành công
+    badRequest: 
+      properties:
+        code:
+          example: 400
+        message:
+          example: dữ liệu không đúng
+    categoryNotFound:
+      properties:
+        code:
+          example: 404
+        message:
+          example: không tìm thấy danh mục
+    accountNotFound:
+      properties:
+        code:
+          example: 404
+        message:
+          example: không tìm thấy tài khoản
+    showPassAccount:
+      properties:
+        _id:
+          example: 654d60aebb3de01d5bb24077
+        password:
+          example: yt1pass
+          
