@@ -9,6 +9,15 @@ async function getAccount(req, res, next) {
     res.status(500).json(error);
   }
 }
+async function getAccountByCategoryId(req, res, next) {
+  try {
+    const CATEGORY_ID = req.params.id;
+    const result = await accountServices.getAccountByCategoryId(CATEGORY_ID);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
 async function getAccountById(req, res, next) {
   try {
     const ACCOUNT_ID = req.params.id;
@@ -124,6 +133,7 @@ async function deleteCategory(req, res, next) {
 }
 module.exports = {
   getAccount,
+  getAccountByCategoryId,
   getAccountById,
   createAccount,
   updateAccount,

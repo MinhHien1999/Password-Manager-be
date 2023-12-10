@@ -18,6 +18,10 @@ async function getAccountById(id) {
   const result = await accountModel.findById(id).populate("category");
   return result;
 }
+async function getAccountByCategoryId(id) {
+  const result = await accountModel.find({category: id}, accountFillable).populate("category");
+  return result;
+}
 async function createAccount(data) {
   const category = await categoryModel.findById(data.category.id);
   const account = new accountModel({
@@ -51,6 +55,7 @@ async function getPasswordById(id) {
 module.exports = {
   getAllAccount,
   getAccountById,
+  getAccountByCategoryId,
   createAccount,
   updateAccount,
   deleteAccount,

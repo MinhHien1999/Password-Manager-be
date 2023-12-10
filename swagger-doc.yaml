@@ -8,7 +8,7 @@ info:
     Hãy đọc chi tiết ở bên dưới
   version: 1.0.11
 servers:
-  - url: /
+  - url: https://password-manager-yakc.onrender.com/
 paths:
   /category:
     get:
@@ -51,6 +51,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/badRequest'
   /category/{id}:
+    get:
+      tags:
+        - Danh mục
+      summary: Cập nhật danh mục hiện tại dựa trên id
+      description: Cập nhật danh mục hiện tại dựa trên id
+      operationId: updateCategory
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          example: 654d5fb9bb3de01d5bb24047
+          schema:
+            type: string
+            format: int64
+            example: 654d5fb9bb3de01d5bb24047
+      responses:
+        '200':
+          description: lấy danh sách tài khoản thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
     put:
       tags:
         - Danh mục

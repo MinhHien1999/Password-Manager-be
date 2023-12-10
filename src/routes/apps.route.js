@@ -17,6 +17,7 @@ router.post("/account/",appMiddleware.validateFormAccountCreate, appController.c
 router.put("/account/:id",appMiddleware.validateFormAccountUpdate, appController.updateAccount);
 router.delete("/account/:id", appController.deleteAccount);
 router.get("/category/", appController.getCategory);
+router.get("/category/:id", appController.getAccountByCategoryId);
 router.put("/category/:id",appMiddleware.validateFormCategory, appController.updateCategory);
 router.post("/category/",appMiddleware.validateFormCategory, appController.createCategory);
 router.delete("/category/:id", appController.deleteCategory);
